@@ -6,7 +6,12 @@ export enum Role {
 }
 
 interface AuthProps {
-  authState: { authenticated: boolean | null; username: string | null; role: Role | null };
+  authState: { 
+    authenticated: boolean | null; 
+    username: string | null; 
+    role: Role | null; 
+    redirectTo: string | null;
+  };
   onLogin: (username: string, password: string) => void;
   onLogout: () => void;
 }
@@ -22,10 +27,12 @@ export const AuthProvider = ({ children }: any) => {
     authenticated: boolean | null; 
     username: string | null; 
     role: Role | null; 
+    redirectTo: string | null;
   }>({ 
     authenticated: null, 
     username: null, 
     role: null, 
+    redirectTo: null,
   });
 
   const login = (username: string, password: string) => {
@@ -33,14 +40,16 @@ export const AuthProvider = ({ children }: any) => {
       setAuthState({ 
         authenticated: true, 
         username: username, 
-        role: Role.ADMIN 
+        role: Role.ADMIN,
+        redirectTo: '/(admin_dashboard)',
       });
     } 
     else if (username === 'driver' && password === 'driver') {
       setAuthState({ 
         authenticated: true, 
         username: username, 
-        role: Role.DRIVER 
+        role: Role.DRIVER,
+        redirectTo: '/(driver_dashboard)',
       });
     } 
     else {
@@ -53,6 +62,7 @@ export const AuthProvider = ({ children }: any) => {
       authenticated: false,
       username: null,
       role: null,
+      redirectTo: '/',
     });
   };
 

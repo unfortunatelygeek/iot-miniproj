@@ -9,24 +9,27 @@ SplashScreen.preventAutoHideAsync();
 
 const StackLayout = () => {
   const { authState } = useAuth();
-	const segments = useSegments();
-	const router = useRouter();
+  const segments = useSegments();
+  const router = useRouter();
 
-	useEffect(() => {
-    const inAuthGroup = segments[0]?.includes('(protected)');
+  useEffect(() => {
+    if (authState?.authenticated && authState?.redirectTo) {
+      router.replace(authState.redirectTo);
+    } else {
+      const inAuthGroup = segments[0]?.includes('(protected)');
+      if (!authState?.authenticated && inAuthGroup) {
+        router.replace('/');
+      }
+    }
+  }, [authState, router, segments]);
 
-		if (!authState?.authenticated && inAuthGroup) {
-			router.replace('/');
-		} else if (authState?.authenticated === true) {
-			router.replace('/(protected)');
-		}
-	}, [authState]);
-
-  return <Stack>
-    <Stack.Screen name="index" options={{ headerShown: false }} />
-    <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-  </Stack>
-}
+  return (
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Slot />
+    </Stack>
+  );
+};
 
 const RootLayout = () => {
   const [fontsLoaded, error] = useFonts({
