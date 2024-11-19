@@ -1,10 +1,32 @@
 import React, { useEffect } from "react";
 import { Text, View } from "react-native";
-import { Slot, SplashScreen, Stack } from "expo-router";
+import { Slot, SplashScreen, Stack, useSegments, useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import "../globals.css";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 
 SplashScreen.preventAutoHideAsync();
+
+const StackLayout = () => {
+  const { authState } = useAuth();
+	const segments = useSegments();
+	const router = useRouter();
+
+	useEffect(() => {
+    const inAuthGroup = segments[0]?.includes('(protected)');
+
+		if (!authState?.authenticated && inAuthGroup) {
+			router.replace('/');
+		} else if (authState?.authenticated === true) {
+			router.replace('/(protected)');
+		}
+	}, [authState]);
+
+  return <Stack>
+    <Stack.Screen name="index" options={{ headerShown: false }} />
+    <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+  </Stack>
+}
 
 const RootLayout = () => {
   const [fontsLoaded, error] = useFonts({
@@ -28,9 +50,9 @@ const RootLayout = () => {
   if(!fontsLoaded && !error) return null;
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-    </Stack>
+    <AuthProvider>
+      <StackLayout />
+    </AuthProvider>
   );
 };
 

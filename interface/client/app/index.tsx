@@ -8,9 +8,12 @@ export default function App() {
   return (
     <View className="flex-1 items-center justify-center">
       <Text className="text-3xl font-pbold">Aditi!</Text>
-      <StatusBar style = 'auto' />
-      <Link href="/profile" style = {{ color: "blue" }}>
+      <StatusBar style='auto' />
+      <Link href="/profile" style={{ color: "blue" }}>
         Go to Profile
+      </Link>
+      <Link href="/(auth)" style={{ color: "blue" }}>
+        Go to Login
       </Link>
     </View>
   );
