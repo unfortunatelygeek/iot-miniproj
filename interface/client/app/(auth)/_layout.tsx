@@ -1,22 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 import React from 'react';
 import { Slot } from 'expo-router';
+import { cssInterop } from "nativewind";
+
+const StyledView = cssInterop(View, { className: 'style' });
 
 const AuthLayout = () => {
   return (
-    <View style={styles.container}>
-      <Text>AuthLayout</Text>
+    <StyledView className="flex-1 bg-gray-50">
       <Slot />
-    </View>
+    </StyledView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default AuthLayout;

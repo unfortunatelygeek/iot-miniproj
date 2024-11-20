@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { View } from "react-native";
 import { Slot, SplashScreen, Stack, useSegments, useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import "../globals.css";
@@ -11,21 +11,25 @@ const StackLayout = () => {
   const { authState } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const prevAuthState = useRef(authState);
 
   useEffect(() => {
-    if (authState?.authenticated && authState?.redirectTo) {
+    if (authState?.authenticated && authState?.redirectTo && prevAuthState.current?.redirectTo !== authState.redirectTo) {
       router.replace(authState.redirectTo);
     } else {
-      const inAuthGroup = segments[0]?.includes('(protected)');
-      if (!authState?.authenticated && inAuthGroup) {
+      const inProtectedGroup = segments[0]?.includes('(protected)');
+      if (!authState?.authenticated && inProtectedGroup && prevAuthState.current?.authenticated !== authState.authenticated) {
         router.replace('/');
       }
     }
+    prevAuthState.current = authState;
   }, [authState, router, segments]);
 
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(admin_dashboard)" options={{ headerShown: false }} />
       <Slot />
     </Stack>
   );
@@ -47,10 +51,10 @@ const RootLayout = () => {
     if (error) {
       console.error(error);
     }
-    if(fontsLoaded) SplashScreen.hideAsync();
+    if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded, error]);
 
-  if(!fontsLoaded && !error) return null;
+  if (!fontsLoaded && !error) return null;
 
   return (
     <AuthProvider>
