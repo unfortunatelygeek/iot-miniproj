@@ -1,22 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import { Slot } from 'expo-router';
+import React from "react";
+import { View } from "react-native";
+import { Slot } from "expo-router";
 
-const DashLayout = () => {
+const AdminDashLayout = () => {
   return (
-    <View style={styles.container}>
-      <Text>DashLayout</Text>
+    <View style={{ flex: 1 }}>
       <Slot />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default DashLayout;
+export default AdminDashLayout;
