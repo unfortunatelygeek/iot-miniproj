@@ -1,54 +1,75 @@
-import React from "react";
-import { View, Text, Image } from "react-native";
-import { Tabs } from "expo-router";
-import { icons } from "../../constants";
+import React, { useState } from 'react';
+import { 
+  View, 
+  Text, 
+  ScrollView, 
+  SafeAreaView, 
+  TouchableOpacity, 
+  RefreshControl 
+} from 'react-native';
+import NotificationSection from '../../components/NotificationSection';
+import { TallySection } from '../../components/TallySection';
 
-const TabIcon = ({ icon, color, name, focused }) => {
+const HomePage = () => {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    // Simulate data refresh
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   return (
-    <View className="items-center justify-center gap-2">
-      <Image source={icon} resizeMode="contain" style={{ width: 24, height: 24, tintColor: color }} />
-      <Text className={`${focused ? 'text-blue-500' : 'text-gray-500'} text-sm`}>
-        {name}
-      </Text>
-    </View>
+    <SafeAreaView className="flex-1 bg-cream">
+      <ScrollView
+        className="px-4 py-2"
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#A67B5B', '#8DA399']} // warmBrowns default and softGreens default
+            progressBackgroundColor="#FFFDD0" // cream
+          />
+        }
+      >
+        <View className="mb-6">
+          <Text 
+            className="text-2xl font-psemibold text-warmBrowns-dark mb-2"
+          >
+            Good Morning, Admin
+          </Text>
+          <Text 
+            className="text-base font-pregular text-gray-600"
+          >
+            Here's an overview of your waste management system
+          </Text>
+        </View>
+
+        <View className="mb-6">
+          <NotificationSection />
+        </View>
+
+        <View>
+          <TallySection />
+        </View>
+
+        <View className="mt-6 mb-4">
+          <TouchableOpacity 
+            className="bg-warmBrowns-default p-4 rounded-xl flex-row justify-center items-center"
+            onPress={() => {
+              // Navigation to detailed view or action
+            }}
+          >
+            <Text className="text-white font-psemibold text-lg">
+              View Full Report
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
-const AdminDashLayout = () => {
-  return (
-    <Tabs
-      screenOptions={({ route }) => ({
-        tabBarShowLabel: false,
-        tabBarIcon: ({ color, focused }) => {
-          let icon;
-          let name;
-
-          if (route.name === 'home') {
-            icon = icons.home;
-            name = 'Home';
-          } else if (route.name === 'profile') {
-            icon = icons.profile;
-            name = 'Profile';
-          }
-
-          return <TabIcon icon={icon} color={color} name={name} focused={focused} />;
-        },
-      })}
-    >
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: "Home",
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profile",
-        }}
-      />
-    </Tabs>
-  );
-};
-
-export default AdminDashLayout;
+export default HomePage;

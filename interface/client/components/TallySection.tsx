@@ -29,7 +29,7 @@ const AreaTally = () => (
   </View>
 );
 
-const TallySection = () => {
+export const TallySection = () => {
   return (
     <View className="space-y-6">
       <View className="grid grid-cols-2 gap-4">

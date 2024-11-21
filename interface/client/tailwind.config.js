@@ -9,6 +9,9 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      fontSize: {
+        'xxs': '0.5rem',
+      },
       colors: {
         warmBrowns: {
           light: '#C19A6B',

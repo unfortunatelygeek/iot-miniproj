@@ -42,3 +42,5 @@ const NotificationSection = () => {
     </View>
   );
 };
+
+export default NotificationSection;
