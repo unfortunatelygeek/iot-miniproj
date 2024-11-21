@@ -9,6 +9,7 @@ import {
   Alert 
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Simulated driver data and notifications
 interface Notification {
@@ -26,13 +27,28 @@ interface PendingBin {
     address: string;
   };
   status: 'pending' | 'critical' | 'normal';
+  assignedToUsername?: string;  
 }
-
 const DriverHomeScreen = () => {
+  const [username, setUsername] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [pendingBins, setPendingBins] = useState<PendingBin[]>([]);
   const [selectedBin, setSelectedBin] = useState<PendingBin | null>(null);
   const [isMapModalVisible, setIsMapModalVisible] = useState(false);
+
+    useEffect(() => {
+    // Fetch driver's username from secure storage
+    const fetchUsername = async () => {
+      try {
+        const storedUsername = await AsyncStorage.getItem('driverUsername');
+        setUsername(storedUsername);
+      } catch (error) {
+        console.error('Error fetching username', error);
+      }
+    };
+
+    fetchUsername();
+  }, []);
 
   // Simulated bin assignments
   useEffect(() => {

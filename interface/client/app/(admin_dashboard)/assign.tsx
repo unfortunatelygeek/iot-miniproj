@@ -10,24 +10,39 @@ import {
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-// Simulated data - in real app, this would come from your backend/cloud
-const driversData = [
+interface Driver {
+  id: string;
+  name: string;
+  username: string;  
+  location: { latitude: number; longitude: number };
+  currentLoad: number;
+  maxLoad: number;
+}
+
+const driversData: Driver[] = [
   {
     id: '1',
     name: 'John Doe',
-    location: { latitude: 19.076, longitude: 72.8777 },
+    username: 'johnd', 
+    location: {
+      latitude: 19.076,
+      longitude: 72.8777,
+    },
     currentLoad: 2,
     maxLoad: 5,
   },
   {
     id: '2',
     name: 'Jane Smith',
-    location: { latitude: 19.1136, longitude: 72.8697 },
+    username: 'janes', 
+    location: {
+      latitude: 19.1136,
+      longitude: 72.8697,
+    },
     currentLoad: 1,
     maxLoad: 5,
   },
 ];
-
 const binsData = [
   {
     id: '1',
@@ -79,7 +94,18 @@ const AssignPage = ({ navigation }) => {
       Alert.alert('Incomplete Selection', 'Select both a bin and a driver.');
       return;
     }
-
+  
+    // Simulated API call (replace with actual API call in real app)
+    const assignmentPayload = {
+      binId: selectedBin.id,
+      driverUsername: selectedDriver.username,  // Send username
+      location: selectedBin.location,
+      status: selectedBin.status
+    };
+  
+    // Simulate sending to backend
+    console.log('Bin Assignment:', assignmentPayload);
+  
     Alert.alert(
       'Bin Assigned',
       `Bin ${selectedBin.id} in ${selectedBin.area} assigned to ${selectedDriver.name}`,
@@ -87,18 +113,20 @@ const AssignPage = ({ navigation }) => {
         {
           text: 'OK',
           onPress: () => {
-            // Update bins data (this would usually involve a backend call)
             const updatedBins = binsData.map((bin) =>
               bin.id === selectedBin.id
-                ? { ...bin, assignedTo: selectedDriver.id }
+                ? { 
+                    ...bin, 
+                    assignedTo: selectedDriver.id,
+                    assignedToUsername: selectedDriver.username  // Store username
+                  }
                 : bin
             );
-
-            // Reset modal and selections
+  
             setIsAssignModalVisible(false);
             setSelectedBin(null);
             setSelectedDriver(null);
-
+  
             console.log('Updated Bins:', updatedBins);
           },
         },

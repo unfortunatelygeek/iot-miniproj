@@ -15,7 +15,6 @@ interface AdminProfile {
 }
 
 const AdminProfileScreen = () => {
-  // Mock admin data - will be replaced with actual database fetch
   const adminData: AdminProfile = {
     id: 'ADMIN_001',
     name: 'John Doe',

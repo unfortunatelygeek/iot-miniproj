@@ -33,13 +33,7 @@ export default function AdminDashLayout() {
     <Tabs
       screenOptions={({ route }) => ({
         tabBarShowLabel: false,
-        headerStyle: {
-          backgroundColor: '#FFFDD0', 
-        },
-        headerTitleStyle: {
-          fontFamily: 'Poppins-SemiBold',
-          color: '#8B6B4E', 
-        },
+        headerShown: false, 
         tabBarStyle: {
           backgroundColor: '#FFFDD0', 
           borderTopColor: '#ADB99A', 
@@ -52,7 +46,7 @@ export default function AdminDashLayout() {
           let name;
 
           switch(route.name) {
-            case 'index':
+            case 'home':
               icon = icons.home;
               name = 'Home';
               break;
@@ -75,14 +69,14 @@ export default function AdminDashLayout() {
         name="home"
         options={{
           title: "Home",
-          headerTitle: "Waste Management Dashboard",
+          headerShown: false, 
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
-          headerTitle: "Admin Profile",
+          headerShown: false, 
         }}
       />
     </Tabs>

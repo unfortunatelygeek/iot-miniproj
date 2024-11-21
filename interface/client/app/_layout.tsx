@@ -14,11 +14,11 @@ const StackLayout = () => {
   const prevAuthState = useRef(authState);
 
   useEffect(() => {
-    if (authState?.authenticated && authState?.redirectTo && prevAuthState.current?.redirectTo !== authState.redirectTo) {
+    if (authState?.authenticated === true && authState?.redirectTo && prevAuthState.current?.redirectTo !== authState.redirectTo) {
       router.replace(authState.redirectTo);
     } else {
       const inProtectedGroup = segments[0]?.includes('(protected)');
-      if (!authState?.authenticated && inProtectedGroup && prevAuthState.current?.authenticated !== authState.authenticated) {
+      if (authState?.authenticated === false && inProtectedGroup) {
         router.replace('/');
       }
     }

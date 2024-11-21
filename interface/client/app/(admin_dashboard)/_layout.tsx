@@ -68,9 +68,9 @@ export default function AdminDashLayout() {
               icon = icons.menu; // Make sure this icon exists in your constants
               name = 'Dash';
               break;
-            // default:
-            //   icon = icons.home;
-            //   name = 'Home';
+            default:
+              icon = icons.home;
+              name = 'Home';
           }
 
           return <TabIcon icon={icon} color={color} name={name} focused={focused} />;

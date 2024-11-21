@@ -6,48 +6,57 @@ export enum Role {
 }
 
 interface AuthProps {
-  authState: { 
-    authenticated: boolean | null; 
-    username: string | null; 
-    role: Role | null; 
+  authState: {
+    authenticated: boolean | null;
+    username: string | null;
+    role: Role | null;
     redirectTo: string | null;
   };
   onLogin: (username: string, password: string) => void;
   onLogout: () => void;
 }
 
-const AuthContext = createContext<Partial<AuthProps>>({});
+const AuthContext = createContext<AuthProps>({
+  authState: {
+    authenticated: null,
+    username: null,
+    role: null,
+    redirectTo: null,
+  },
+  onLogin: () => {},
+  onLogout: () => {},
+});
 
 export const useAuth = () => {
   return useContext(AuthContext);
 }
 
-export const AuthProvider = ({ children }: any) => {
-  const [authState, setAuthState] = useState<{ 
-    authenticated: boolean | null; 
-    username: string | null; 
-    role: Role | null; 
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [authState, setAuthState] = useState<{
+    authenticated: boolean | null;
+    username: string | null;
+    role: Role | null;
     redirectTo: string | null;
-  }>({ 
-    authenticated: null, 
-    username: null, 
-    role: null, 
+  }>({
+    authenticated: null,
+    username: null,
+    role: null,
     redirectTo: null,
   });
 
   const login = (username: string, password: string) => {
     if (username === 'admin' && password === 'admin') {
-      setAuthState({ 
-        authenticated: true, 
-        username: username, 
+      setAuthState({
+        authenticated: true,
+        username: username,
         role: Role.ADMIN,
         redirectTo: '/(admin_dashboard)',
       });
     } 
     else if (username === 'driver' && password === 'driver') {
-      setAuthState({ 
-        authenticated: true, 
-        username: username, 
+      setAuthState({
+        authenticated: true,
+        username: username,
         role: Role.DRIVER,
         redirectTo: '/(driver_dashboard)',
       });
@@ -56,10 +65,10 @@ export const AuthProvider = ({ children }: any) => {
       alert('Invalid username or password');
     }
   };
-  
+
   const logout = () => {
     setAuthState({
-      authenticated: false,
+      authenticated: null, 
       username: null,
       role: null,
       redirectTo: '/',
@@ -72,5 +81,9 @@ export const AuthProvider = ({ children }: any) => {
     onLogout: logout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
